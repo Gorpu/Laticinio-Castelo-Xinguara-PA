@@ -386,7 +386,7 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get_date()}'""").fetchone()[0]
     btn_CONF_PAGAMENTO = ttk.Button(tb_litros, text='CONFIRMAR PAGAMENTO', command=CON_PAGAMENTO)
     btn_CONF_PAGAMENTO.place(x=220, y=160)
 
-    treegh = ttk.Treeview(tb_litros, columns = ('#0', '#1', '#2', '#3', '#4', '#5', '#6', '#7', '#8'),height=10)
+    treegh = ttk.Treeview(tb_litros, columns = ('#0', '#1', '#2', '#3', '#4', '#5', '#6', '#7'),height=10)
     # Conexão com o banco de dados
     conn = sqlite3.connect('fornecedores.db')
     cursor = conn.cursor()
@@ -398,27 +398,26 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get_date()}'""").fetchone()[0]
     treegh.heading('#4', text='CPFCNPJ')
     treegh.heading('#5', text='BANCO')
     treegh.heading('#6', text='CHEQUE/PIX')
-    treegh.heading('#7', text='C/P')
-    treegh.heading('#8', text='ENDEREÇO')
+    treegh.heading('#7', text='ENDEREÇO')
+    
 
 
     # Definir largura das colunas
-    treegh.column('#0', stretch=tk.NO, minwidth=0, width=30)
+    treegh.column('#0', stretch=tk.NO, minwidth=0, width=50)
     treegh.column('#1', stretch=tk.NO, minwidth=0, width=150)
     treegh.column('#2', stretch=tk.NO, minwidth=0, width=100)
     treegh.column('#3', stretch=tk.NO, minwidth=0, width=150)
     treegh.column('#4', stretch=tk.NO, minwidth=0, width=200)
     treegh.column('#5', stretch=tk.NO, minwidth=0, width=150)
     treegh.column('#6', stretch=tk.NO, minwidth=0, width=200)
-    treegh.column('#7', stretch=tk.NO, minwidth=0, width=30)
-    treegh.column('#8', stretch=tk.NO, minwidth=0, width=350)
+    treegh.column('#7', stretch=tk.NO, minwidth=0, width=350)
 
     # Obter dados do banco de dados
     cursor.execute('SELECT * FROM fornecedores')
     rows = cursor.fetchall()
 
     for row in rows:
-        treegh.insert('', 'end', text=row[0], values=(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]))
+        treegh.insert('', 'end', text=row[0], values=(row[1], row[2], row[3], row[4], row[5], row[6], row[8]))
         ordem_afabetica = [(treegh.set(item, '#1'), item) for item in treegh.get_children('')]
         ordem_afabetica.sort()
         for index, (val, item) in enumerate(ordem_afabetica):
@@ -617,8 +616,8 @@ def QUINZENAS_ANALISE():
     coluna_somatoria_dias.place(x=0, y=340)
 
     coluna_total = ttk.Treeview(qunz_win, columns=("#0", '#1', '#2'), height=1)
-    coluna_total.heading('#0', text='DESCONTO NESSE PERÍODO:')
-    coluna_total.column('#0',stretch=tk.NO, minwidth=0, width=250)
+    coluna_total.heading('#0', text='DESCONTO NESSE PERÍODO R$-BRL:')
+    coluna_total.column('#0',stretch=tk.NO, minwidth=0, width=275)
     coluna_total.heading('#1', text='TOTAL A PAGAR NESSE PERÍODO R$-BRL:')
     coluna_total.column('#1',stretch=tk.NO, minwidth=0, width=275)
     coluna_total.heading('#1', text='SOMA TOTAL NESSE PERÍODO R$-BRL:')
@@ -628,7 +627,7 @@ def QUINZENAS_ANALISE():
     
 
 
-    coluna_total.place(x=560,y=0)
+    coluna_total.place(x=530,y=0)
     def kill_qunz_win(event):
         qunz_win.destroy()
     qunz_win.bind_all('<Alt-z>', kill_qunz_win)
@@ -770,6 +769,42 @@ def WIN_UDPATE_CADASTRO():
     BT_SEARCH_CAD.grid(row=2)
     win_update.title("CADASTRO DE FORNECEDOR")
     win_update.attributes("-fullscreen", True)
+    
+    treegh2 = ttk.Treeview(win_update, columns = ('#0', '#1', '#2', '#3', '#4', '#5', '#6', '#7'),height=10)
+    # Conexão com o banco de dados
+    conn = sqlite3.connect('fornecedores.db')
+    cursor = conn.cursor()
+    # Definir cabeçalhos das colunas
+    treegh2.heading('#0', text='ID')
+    treegh2.heading('#1', text='NOME')
+    treegh2.heading('#2', text='APELIDO')
+    treegh2.heading('#3', text='TELEFONE')
+    treegh2.heading('#4', text='CPFCNPJ')
+    treegh2.heading('#5', text='BANCO')
+    treegh2.heading('#6', text='CHEQUE/PIX')
+    treegh2.heading('#7', text='ENDEREÇO')
+
+    # Definir largura das colunas
+    treegh2.column('#0', stretch=tk.NO, minwidth=0, width=50)
+    treegh2.column('#1', stretch=tk.NO, minwidth=0, width=150)
+    treegh2.column('#2', stretch=tk.NO, minwidth=0, width=100)
+    treegh2.column('#3', stretch=tk.NO, minwidth=0, width=150)
+    treegh2.column('#4', stretch=tk.NO, minwidth=0, width=200)
+    treegh2.column('#5', stretch=tk.NO, minwidth=0, width=150)
+    treegh2.column('#6', stretch=tk.NO, minwidth=0, width=200)
+    treegh2.column('#7', stretch=tk.NO, minwidth=0, width=350)
+
+    # Obter dados do banco de dados
+    cursor.execute('SELECT * FROM fornecedores')
+    rows = cursor.fetchall()
+
+    for row in rows:
+        treegh2.insert('', 'end', text=row[0], values=(row[1], row[2], row[3], row[4], row[5], row[6], row[8]))
+        ordem_afabetica = [(treegh2.set(item, '#1'), item) for item in treegh2.get_children('')]
+        ordem_afabetica.sort()
+        for index, (val, item) in enumerate(ordem_afabetica):
+            treegh2.move(item, '', index)
+    treegh2.place(x=10, y=450)    
     def kill_win_update(event):
         win_update.destroy()
     win_update.bind_all('<Alt-z>', kill_win_update)
