@@ -14,6 +14,28 @@ from reportlab.pdfgen import canvas
 import locale
 locale.setlocale(locale.LC_TIME, 'pt_BR.utf-8')
 
+def config_valor_leite(event):
+    def GREP_SETTINGS():
+        banco_dbs = sqlite3.connect("fornecedores.db")
+        banco = banco_dbs.cursor()
+        banco.execute(f'''UPDATE TABLE SETTING_DEFAULT SET PRECO NUMBER={PRECO_UND_LEITE_EN.get()}''')
+        banco_dbs.commit()
+        print('SALVO')
+    janela_val = tk.Tk()
+    banco_dbs = sqlite3.connect("fornecedores.db")
+    banco = banco_dbs.cursor()
+    GREP_PRECO_OPTION_SETTING = banco.execute('SELECT PRECO FROM SETTING_DEFAULT').fetchall()[0]
+    janela_val.title("Settings")
+    janela_val.resizable(width=False, height=False)
+    janela_val.geometry('300x130')
+    PRECO_UND_LEITE_LB = ttk.Label(janela_val, text="LEITE UND VALOR (R$):")
+    PRECO_UND_LEITE_LB.grid(row=0)
+    PRECO_UND_LEITE_EN = ttk.Entry(janela_val)
+    PRECO_UND_LEITE_EN.grid(row=1)
+    PRECO_UND_LEITE_EN.insert(tk.END, GREP_PRECO_OPTION_SETTING)
+    SAVE_SETTING_BUTTON = ttk.Button(janela_val, text="SALVAR", command=GREP_SETTINGS)
+    SAVE_SETTING_BUTTON.grid(row=2)
+    janela_val.mainloop()
 meses = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -130,40 +152,128 @@ def TABELA_LITROS():
 WHERE ID={ID_QNZ.get()} 
 AND DATA >= '{en_PERIODO_INICIAL_SM_LT.get()}' 
 AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
-    
+
         
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
-        for row in rows2:
-            text1 = f"{row[0]}    |     LITROS: {row[2]}"
-            c.drawString(318, y_position, text1)
+        for row in rows:
+            text1 = f"DIA {row[0]}"
+            c.drawString(10, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
-            
-        y_position = 250  # Posição inicial na página
-        c.setFont("Helvetica-Bold", 7)
-        for row in rows2:
-            text1 = f"{row[0]}    |     LITROS: {row[2]}"
-            c.drawString(318, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
-            
+
+        
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows:
-            text1 = f"{row[0]}    |    LITROS: {row[2]}"
-            c.drawString(148, y_position, text1)
+            text1 = f"LITROS: {row[2]}"
+            c.drawString(40, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
-            
+
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows:
+            text1 = f"DESCONTO: {row[4]}"
+            c.drawString(110, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows:
+            text1 = f"VALOR (R$): {row[3]}"
+            c.drawString(240, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+        
+        c.line(315, 660, 315, 500 )
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"DIA {row[0]}"
+            c.drawString(320, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"LITROS: {row[2]}"
+            c.drawString(350, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"DESCONTO: {row[4]}"
+            c.drawString(420, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"VALOR (R$): {row[3]}"
+            c.drawString(540, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
         y_position = 250  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows:
-            text1 = f"{row[0]}    |    LITROS: {row[2]}"
-            c.drawString(148, y_position, text1)
+            text1 = f"DIA {row[0]}"
+            c.drawString(10, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
 
+        
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows:
+            text1 = f"LITROS: {row[2]}"
+            c.drawString(40, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows:
+            text1 = f"DESCONTO: {row[4]}"
+            c.drawString(110, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows:
+            text1 = f"VALOR (R$): {row[3]}"
+            c.drawString(240, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+        
+        c.line(315, 260, 315, 100 )
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"DIA {row[0]}"
+            c.drawString(320, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"LITROS: {row[2]}"
+            c.drawString(350, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"DESCONTO: {row[4]}"
+            c.drawString(420, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
+
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows2:
+            text1 = f"VALOR (R$): {row[3]}"
+            c.drawString(540, y_position, text1)
+            y_position  -= 10  # Salto para a próxima linha
         
         ##################################################################
         mind_text = c.setFont("Helvetica-Bold", 10)
         c.drawCentredString(280, 480, f'DESCONTO TOTAL R$: {rows_2}    |    TOTAL FINAL R$: {rows1}    |    TOTAL LITROS UND: {Soma_Total_litros}')
+
         mind_text = c.setFont("Helvetica-Bold", 10)
         c.drawCentredString(280, 80, f'DESCONTO TOTAL R$: {rows_2}    |    TOTAL FINAL R$: {rows1}    |    TOTAL LITROS UND: {Soma_Total_litros}')
         mind_text = c.setFont("Helvetica-Bold", 8)
@@ -172,11 +282,46 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
         c.drawCentredString(300, 55, 'ASSINATURA:______________________________________________________ DATA:__/__/___')
         mind_text = c.setFont("Helvetica-Bold", 8)
         c.drawCentredString(300, 445, 'RG/CPF:____________________________________________')
+        mind_text = c.setFont("Helvetica-Bold", 15)
+        c.drawCentredString(5, 420, f'-----'*50)
         mind_text = c.setFont("Helvetica-Bold", 8)
         c.drawCentredString(300, 45, 'RG/CPF:____________________________________________')
         c.save()
         WIN_INFO()
     def SAVE_INFO(event):
+        id_grep = ID_QNZ.get()
+        en_TOTAL_FINALdf.delete(0, 'end')
+        Quantidade_litros = float(en_QUANTIDADE_VOLUMESdf.get())
+        Valor_unitario_lt = float(en_VALOR_LITROdf.get())
+        Valor_Desconto = float(en_VALOR_DESCONTOdf.get())
+        Razao_Desconto = en_RAZAO_DESCONTOdf.get().upper()
+        resultado_QVV = Quantidade_litros * Valor_unitario_lt - Valor_Desconto
+        numero_formatado = "{:.2f}".format(resultado_QVV)
+        en_TOTAL_FINALdf.insert(0, numero_formatado)
+    
+        data_gt = en_DATAdf.get_date()
+        Quantidade_litros = float(en_QUANTIDADE_VOLUMESdf.get())
+        Valor_unitario_lt = float(en_VALOR_LITROdf.get())
+        Valor_Desconto = float(en_VALOR_DESCONTOdf.get())
+        Razao_Desconto = en_RAZAO_DESCONTOdf.get().upper()
+        Quantidade_Final_RS = en_TOTAL_FINALdf.get()
+
+        banco_dividendos = sqlite3.connect("fornecedores.db")
+        banco = banco_dividendos.cursor()
+        CP_GREP = en_CHEQUE_PIX.get().upper()
+        banco.execute(f"""UPDATE somatoria_diaria SET QUANT_LTS={Quantidade_litros}, VALOR_LT_UND={Valor_unitario_lt}, VALOR_LTS_TOTAL={Quantidade_Final_RS}, DESCONTO_RS={Valor_Desconto}, MOTIVO='{Razao_Desconto}', CP='{CP_GREP}', VER_PAG='N' WHERE ID={id_grep} AND DATA='{data_gt}';""")
+        banco_dividendos.commit()
+        banco_dividendos.close()
+        print('Dados Inseridos')
+        data_uo = en_DATAdf.get_date()
+        nova_data = data_uo + timedelta(days=1)
+        en_DATAdf.set_date(nova_data)
+        Soma()
+        en_QUANTIDADE_VOLUMESdf.delete(0, tk.END)
+        en_QUANTIDADE_VOLUMESdf.insert(0, '')
+        en_VALOR_DESCONTOdf.delete(0, tk.END)
+        en_VALOR_DESCONTOdf.insert(0, '0')
+    def SAVE_INFO2():
         id_grep = ID_QNZ.get()
         en_TOTAL_FINALdf.delete(0, 'end')
         Quantidade_litros = float(en_QUANTIDADE_VOLUMESdf.get())
@@ -239,7 +384,7 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
 
         win_pagar = tk.Tk()
         nome_id = banco.execute(f'SELECT NOME FROM fornecedores WHERE ID={ID_QNZ.get()}').fetchone()[0]
-        win_pagar.geometry('240x150')
+        win_pagar.geometry('240x190')
         win_pagar.title('Registro')
         win_pagar.resizable(False, False)
         label_info_pgr = ttk.Label(win_pagar,text=f'REGISTRAR PAGAMENTO?\n\nNOME: {nome_id}\nDIAS: {en_PERIODO_INICIAL_SM_LT.get()} A {en_PERIODO_FINAL_SM_LT2.get()}\nPRIMEIRA QUINZENA R$: {rows1}\nSEGUNDA QUINZENA R$ {rows2s}\n')
@@ -298,6 +443,7 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
         en_PERIODO_FINAL_SM_LT2.insert(tk.END, f'{ano_atual}-{mesee}-{ultimo_dia}')
         Soma()
         # Atualizando o label com o último dia  
+
     def grep_NEXT_log(event):
         GP_LB_DTA = en_DATAdf.get_date()
         GP_LB_ID = ID_QNZ.get()
@@ -325,7 +471,8 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
         en_CHEQUE_PIX.insert(tk.END, GPN_en_CHEQUE_PIX)
         en_TOTAL_FINALdf.insert(tk.END, GPN_en_TOTAL_FINALdf)
         
-    def grep_NEXT_log2():
+    def grep_NEXT_log2(event):
+        SAVE_INFO2()
         GP_LB_DTA = en_DATAdf.get_date()
         GP_LB_ID = ID_QNZ.get()
         en_QUANTIDADE_VOLUMESdf.delete(0, tk.END)
@@ -339,7 +486,7 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
         banco = banco_dividendos.cursor()
         
         GPN_en_QUANTIDADE_VOLUMESdf =  banco.execute(f"SELECT QUANT_LTS FROM somatoria_diaria WHERE DATA='{GP_LB_DTA}' AND ID={GP_LB_ID}").fetchone()[0]
-        GPN_en_VALOR_LITROdf =  banco.execute(f"SELECT VALOR_LT_UND FROM somatoria_diaria WHERE DATA='{GP_LB_DTA}' AND ID={GP_LB_ID}").fetchone()[0]
+        GPN_en_VALOR_LITROdf =  banco.execute(f"SELECT PRECO FROM SETTING_DEFAULT").fetchone()[0]
         GPN_en_VALOR_DESCONTOdf =  banco.execute(f"SELECT DESCONTO_RS FROM somatoria_diaria WHERE DATA='{GP_LB_DTA}' AND ID={GP_LB_ID}").fetchone()[0]
         GPN_en_RAZAO_DESCONTOdf =  banco.execute(f"SELECT MOTIVO FROM somatoria_diaria WHERE DATA='{GP_LB_DTA}' AND ID={GP_LB_ID}").fetchone()[0]
         GPN_en_CHEQUE_PIX =  banco.execute(f"SELECT CP FROM somatoria_diaria WHERE DATA='{GP_LB_DTA}' AND ID={GP_LB_ID}").fetchone()[0]
@@ -389,8 +536,11 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
                     values.append('')
 
                 # Inserção dos resultados no Treeview
+                LB_LEITE_QUANT_CALENDAR_QNZ = ttk.Label(tb_litros, text="QUANTIDADE LITROS MÊS:")
+                LB_LEITE_QUANT_CALENDAR_QNZ.place(x=5, y=180)
                 tree_qt.insert('', 'end', text=sd1[0], values=(values))
                 tree_qt.place(x=-95, y=200)
+                
                 
 
         banco_dividendos = sqlite3.connect('fornecedores.db')
@@ -478,17 +628,20 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
     tb_litros = tk.Tk()
     tb_litros.attributes('-fullscreen', True)
 
-    LB_ID_QNZ = ttk.Label(tb_litros, text="ID FORNECEDOR")
+    LB_ID_QNZ = ttk.Label(tb_litros, text="1 - ID FORNECEDOR")
     LB_ID_QNZ.place(x=10, y=5)
-    
+
     ID_QNZ = ttk.Entry(tb_litros, width=2)
-    ID_QNZ.place(x=10, y=20)
+    ID_QNZ.place(x=10, y=25)
+
+    LB_CALENDAR_QNZ = ttk.Label(tb_litros, text="2 - SELECIONAR MÊS")
+    LB_CALENDAR_QNZ.place(x=10, y=45)
     
     Combox_MESES = ttk.Combobox(tb_litros, values=meses)
     Combox_MESES.bind("<<ComboboxSelected>>", mostrar_ultimo_dia)  # Chamando a função ao selecionar um item
     Combox_MESES.pack(padx=10, pady=5)
     Combox_MESES.set("Selecione o mês")
-    Combox_MESES.place(x=10, y=45)
+    Combox_MESES.place(x=10, y=65)
     
     ###PRIMEIRA QUINZENA BUTTONS 
     en_PERIODO_INICIAL_SM_LT = ttk.Entry(tb_litros, width=12)
@@ -501,14 +654,12 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
 
     en_PERIODO_FINAL_SM_LT2 = ttk.Entry(tb_litros, width=12)
     
-    BT_QUINZENA1_VIEW_DATA2 = ttk.Button(tb_litros, text='VER QUINZENAS', command=Soma)
-    BT_QUINZENA1_VIEW_DATA2.place(x=10, y=170)
-    
+
     btn_CRIAR_RECIBO = ttk.Button(tb_litros, text='GERAR RECIBO', command=GERAR_RECIBO_PAGAMENTO)
-    btn_CRIAR_RECIBO.place(x=120, y=170)
+    btn_CRIAR_RECIBO.place(x=10, y=100)
 
     btn_CONF_PAGAMENTO = ttk.Button(tb_litros, text='CONFIRMAR PAGAMENTO', command=CON_PAGAMENTO)
-    btn_CONF_PAGAMENTO.place(x=220, y=170)
+    btn_CONF_PAGAMENTO.place(x=120, y=100)
 
     treegh = ttk.Treeview(tb_litros, columns = ('#0', '#1', '#2', '#3', '#4', '#5', '#6', '#7'),height=6)
     # Conexão com o banco de dados
@@ -548,12 +699,14 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
     # Posicionar a árvore na janela
 
     treegh.place(x=00, y=350)
+    LB_IDS_FORNECEDORES_LISTA = ttk.Label(tb_litros, text="DADOS FORNECEDORES:")
+    LB_IDS_FORNECEDORES_LISTA.place(x=10, y=325)
     
-    lb_DATAdf = tk.Label(tb_litros, text="DATA:")
-    lb_DATAdf.place(x=10, y=570)
+    lb_DATAdf = tk.Label(tb_litros, text="SELECIONAR DATA:")
+    lb_DATAdf.place(x=10, y=530)
     en_DATAdf = DateEntry(tb_litros, date_pattern="yyyy-mm-dd", width=12)
     en_DATAdf.pack(ipadx=2, ipady=2)
-    en_DATAdf.place(x=10, y=590)
+    en_DATAdf.place(x=10, y=550)
     en_DATAdf.bind("<<DateEntrySelected>>", grep_NEXT_log)
 
     lb_QUANTIDADE_VOLUMESdf = tk.Label(tb_litros, text="QUANTIDADE (LITROS):")
@@ -579,18 +732,18 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
     en_RAZAO_DESCONTOdf.insert(0,"SEM DESCONTO.")
 
     lb_CHEQUE_PIX = tk.Label(tb_litros, text="C/P:")
-    lb_CHEQUE_PIX.place(x=810, y=630)
+    lb_CHEQUE_PIX.place(x=860, y=630)
 
     en_CHEQUE_PIX = tk.Entry(tb_litros, width=2)
-    en_CHEQUE_PIX.place(x=810, y=650)
+    en_CHEQUE_PIX.place(x=860, y=650)
     
     lb_TOTAL_FINALdf = tk.Label(tb_litros, text="PAGAR AO FORNECEDOR (R$):")
-    lb_TOTAL_FINALdf.place(x=1010, y=630)
+    lb_TOTAL_FINALdf.place(x=990, y=630)
     
     en_TOTAL_FINALdf = tk.Entry(tb_litros, width=7)
-    en_TOTAL_FINALdf.place(x=1010, y=650)
+    en_TOTAL_FINALdf.place(x=990, y=650)
 
-    en_QUANTIDADE_VOLUMESdf.bind("<Return>", SAVE_INFO)
+    en_QUANTIDADE_VOLUMESdf.bind("<Return>", grep_NEXT_log2)
     tb_litros.mainloop()
 def db_create(event):
     try:
@@ -625,11 +778,11 @@ def db_create(event):
             CP char(1),
             FOREIGN KEY (ID) REFERENCES fornecedores(ID));  
         ''')
-        banco.execute('''CREATE TABLE PRECO_PADRAO_PG(
-            PRECO NUMBER,
-            TRANFERENCIA NUMBER,
-            CHEQUE NUMBER
+        banco.execute('''CREATE TABLE SETTING_DEFAULT(
+            PRECO INT
         )''')
+        banco_dividendos.commit()
+        banco.execute('''INSERT INTO SETTING_DEFAULT (PRECO) VALUES (1.65)''')
         banco_dividendos.commit()
         banco_dividendos.close()
         WIN_INFO()
@@ -1072,10 +1225,10 @@ def WIN_CADASTRO():
             data_inicial_str = '2023-11-01'
             data_final_str = '2024-12-31'
 
-            data_inicial = datetime.datetime.strptime(data_inicial_str, '%Y-%m-%d')
-            data_final = datetime.datetime.strptime(data_final_str, '%Y-%m-%d')
+            data_inicial = datetime.strptime(data_inicial_str, '%Y-%m-%d')
+            data_final = datetime.strptime(data_final_str, '%Y-%m-%d')
 
-            delta_dias = datetime.timedelta(days=1)
+            delta_dias = timedelta(days=1)
 
             # Loop para percorrer as datas
             data_atual = data_inicial
@@ -1193,10 +1346,13 @@ def MAIN_WINDOW():
     ##Fechar Janela Principal
     def kill_main_win(event):
         main_win.destroy()
-    main_win.bind_all('<Alt-z>', kill_main_win)
+    main_win.bind_all('<Alt-q>', kill_main_win)
+    main_win.bind_all('<Alt-Q>', kill_main_win)
 
     ###Criar Banco de Dados
-    main_win.bind_all('<c>', db_create)
-    main_win.bind_all('<C>', db_create)
+    main_win.bind_all('<Alt-w>', db_create)
+    main_win.bind_all('<Alt-w>', db_create)
+    main_win.bind_all('<Alt-c>', config_valor_leite)
+    main_win.bind_all('<Alt-C>', config_valor_leite)
     main_win.mainloop()
 MAIN_WINDOW()
