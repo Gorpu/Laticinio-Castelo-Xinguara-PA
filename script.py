@@ -110,6 +110,24 @@ def TABELA_LITROS():
 """)
         rows2 = VIEW2.fetchall()
 
+        VIEW3 = conn.execute(f"""SELECT MOTIVO, SUBSTR(DATA, 9, 2), DESCONTO_RS
+        FROM somatoria_diaria
+        WHERE DATA >= '{en_PERIODO_INICIAL_SM_LT.get()}' 
+        AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'
+        AND MOTIVO <> ' ' 
+        AND ID = {ID_QNZ.get()};
+""")
+        rows3 = VIEW3.fetchall()
+
+        VIEW4 = conn.execute(f"""SELECT ROUND(AVG(VALOR_LT_UND), 2) AS MEDIA
+        FROM somatoria_diaria
+        WHERE DATA >= '{en_PERIODO_INICIAL_SM_LT.get()}' 
+        AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'
+        AND QUANT_LTS !='0'
+        AND ID = {ID_QNZ.get()};
+""")
+        rows4 = VIEW4.fetchone()
+
         
         ###################################
 
@@ -152,71 +170,110 @@ def TABELA_LITROS():
 WHERE ID={ID_QNZ.get()} 
 AND DATA >= '{en_PERIODO_INICIAL_SM_LT.get()}' 
 AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
+        ##EIXO VERTICAL RECIBO 01
+        c.line(70, 660, 70, 470 )
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
 
-        
+        c.line(570, 660, 570, 470 )
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        c.line(290, 660, 290, 490 )
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows:
             text1 = f"DIA {row[0]}"
-            c.drawString(10, y_position, text1)
+            c.drawString(75, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
 
-        
+
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows:
             text1 = f"LITROS: {row[2]}"
-            c.drawString(40, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
-
-        y_position = 650  # Posição inicial na página
-        c.setFont("Helvetica-Bold", 7)
-        for row in rows:
-            text1 = f"DESCONTO: {row[4]}"
-            c.drawString(110, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
-
-        y_position = 650  # Posição inicial na página
-        c.setFont("Helvetica-Bold", 7)
-        for row in rows:
-            text1 = f"VALOR (R$): {row[3]}"
-            c.drawString(240, y_position, text1)
+            c.drawString(125, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
         
-        c.line(315, 660, 315, 500 )
+        c.line(175, 660, 175, 490 )
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows2:
             text1 = f"DIA {row[0]}"
-            c.drawString(320, y_position, text1)
+            c.drawString(180, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
+
 
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows2:
             text1 = f"LITROS: {row[2]}"
-            c.drawString(350, y_position, text1)
+            c.drawString(230, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
+        y_position = 650  # Posição inicial na página
+    
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(390, 650, 'DESCONTOS')
 
+        y_position = 640  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows3:
+            if row[0].strip() != '':
+                text1 = f"DIA {row[1]}: {row[0]}"
+                c.drawString(300, y_position, text1)
+                y_position  -= 10  # Salto para a próxima linha
+        
+        y_position = 640  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows3:
+            if row[0].strip() != '':
+                text1 = f"VALOR: R$ {row[2]}"
+                c.drawString(420, y_position, text1)
+                y_position  -= 10  # Salto para a próxima linha
+        
+        ##EIXO HORIZONTAL RECIBO 01
+        #c.line(70=horizontal, 660, 580=Altura, 660 )
+        c.line(70, 490, 570, 490 )
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
-        for row in rows2:
-            text1 = f"DESCONTO: {row[4]}"
-            c.drawString(420, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
 
+        c.line(70, 660, 570, 660 )
         y_position = 650  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
-        for row in rows2:
-            text1 = f"VALOR (R$): {row[3]}"
-            c.drawString(540, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
+
+        c.line(290, 647, 570, 647)
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        c.line(70, 470, 570, 470 )
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        ##
+
+        ##EIXO VERTICAL RECIBO02
+        c.line(70, 260, 70, 70 )
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        c.line(570, 260, 570, 70 )
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        c.line(290, 260, 290, 90 )
+        y_position = 250  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
 
         y_position = 250  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows:
             text1 = f"DIA {row[0]}"
-            c.drawString(10, y_position, text1)
+            c.drawString(75, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
 
         
@@ -224,68 +281,95 @@ AND DATA <= '{en_PERIODO_FINAL_SM_LT2.get()}'""").fetchone()[0]
         c.setFont("Helvetica-Bold", 7)
         for row in rows:
             text1 = f"LITROS: {row[2]}"
-            c.drawString(40, y_position, text1)
+            c.drawString(125, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
 
-        y_position = 250  # Posição inicial na página
-        c.setFont("Helvetica-Bold", 7)
-        for row in rows:
-            text1 = f"DESCONTO: {row[4]}"
-            c.drawString(110, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
+        c.line(175, 260, 175, 90 )
+        y_position = 650  # Posição inicial na página
 
-        y_position = 250  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
-        for row in rows:
-            text1 = f"VALOR (R$): {row[3]}"
-            c.drawString(240, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
-        
-        c.line(315, 260, 315, 100 )
         y_position = 250  # Posição inicial na página
-        c.setFont("Helvetica-Bold", 7)
         for row in rows2:
             text1 = f"DIA {row[0]}"
-            c.drawString(320, y_position, text1)
+            c.drawString(180, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
 
         y_position = 250  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
         for row in rows2:
             text1 = f"LITROS: {row[2]}"
-            c.drawString(350, y_position, text1)
+            c.drawString(230, y_position, text1)
             y_position  -= 10  # Salto para a próxima linha
 
-        y_position = 250  # Posição inicial na página
-        c.setFont("Helvetica-Bold", 7)
-        for row in rows2:
-            text1 = f"DESCONTO: {row[4]}"
-            c.drawString(420, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(390, 250, 'DESCONTOS')
 
-        y_position = 250  # Posição inicial na página
+        y_position = 240  # Posição inicial na página
         c.setFont("Helvetica-Bold", 7)
-        for row in rows2:
-            text1 = f"VALOR (R$): {row[3]}"
-            c.drawString(540, y_position, text1)
-            y_position  -= 10  # Salto para a próxima linha
+        for row in rows3:
+            if row[0].strip() != '':
+                text1 = f"DIA {row[1]}: {row[0]}"
+                c.drawString(300, y_position, text1)
+                y_position  -= 10  # Salto para a próxima linha
+        
+        y_position = 240  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+        for row in rows3:
+            if row[0].strip() != '':
+                text1 = f"VALOR: R$ {row[2]}"
+                c.drawString(420, y_position, text1)
+                y_position  -= 10  # Salto para a próxima linha
+        
+        ##EIXO HORIZONTAL RECIBO 02
+        #c.line(70=horizontal, 660, 580=Altura, 660 )
+        c.line(70, 260, 570, 260 )
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        c.line(290, 247, 570, 247)
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        c.line(70, 90, 570, 90 )
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        c.line(70, 70, 570, 70 )
+        y_position = 650  # Posição inicial na página
+        c.setFont("Helvetica-Bold", 7)
+
+        
         
         ##################################################################
-        mind_text = c.setFont("Helvetica-Bold", 10)
-        c.drawCentredString(280, 480, f'DESCONTO TOTAL R$: {rows_2}    |    TOTAL FINAL R$: {rows1}    |    TOTAL LITROS UND: {Soma_Total_litros}')
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(120, 480, f'DESCONTO LÍQUIDO: R${rows_2}')
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(245, 480, f'TOTAL LÍQUIDO: R${rows1}')
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(375, 480, f'TOTAL LITROS UND: {Soma_Total_litros}')
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(505, 480, f'VALOR DO LITRO UND: R${rows4[0]}')
 
-        mind_text = c.setFont("Helvetica-Bold", 10)
-        c.drawCentredString(280, 80, f'DESCONTO TOTAL R$: {rows_2}    |    TOTAL FINAL R$: {rows1}    |    TOTAL LITROS UND: {Soma_Total_litros}')
+
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(120, 80, f'DESCONTO LÍQUIDO: R${rows_2}')
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(245, 80, f'TOTAL LÍQUIDO: R${rows1}')
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(375, 80, f'TOTAL LITROS UND: {Soma_Total_litros}')
+        mind_text = c.setFont("Helvetica-Bold", 7)
+        c.drawCentredString(505, 80, f'VALOR DO LITRO UND: R${rows4[0]}')
+
         mind_text = c.setFont("Helvetica-Bold", 8)
-        c.drawCentredString(300, 455, 'ASSINATURA:______________________________________________________ DATA:__/__/___')
+        c.drawCentredString(300, 445, 'ASSINATURA:______________________________________________________ DATA:__/__/___')
         mind_text = c.setFont("Helvetica-Bold", 8)
-        c.drawCentredString(300, 55, 'ASSINATURA:______________________________________________________ DATA:__/__/___')
+        c.drawCentredString(300, 45, 'ASSINATURA:______________________________________________________ DATA:__/__/___')
         mind_text = c.setFont("Helvetica-Bold", 8)
-        c.drawCentredString(300, 445, 'RG/CPF:____________________________________________')
+        c.drawCentredString(300, 435, 'RG/CPF:____________________________________________')
         mind_text = c.setFont("Helvetica-Bold", 15)
-        c.drawCentredString(5, 420, f'-----'*50)
+        c.drawCentredString(5, 410, f'-----'*50)
         mind_text = c.setFont("Helvetica-Bold", 8)
-        c.drawCentredString(300, 45, 'RG/CPF:____________________________________________')
+        c.drawCentredString(300, 35, 'RG/CPF:____________________________________________')
         c.save()
         WIN_INFO()
     def SAVE_INFO(event):
