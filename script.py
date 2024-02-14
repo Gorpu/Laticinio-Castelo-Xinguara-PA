@@ -12,13 +12,21 @@ from tkcalendar import DateEntry
 from babel.numbers import get_territory_currencies, format_currency
 from reportlab.pdfgen import canvas
 import locale
+import dropbox
+
+access_token = 'sl.BvkBj81tQxKpMKvYN5VTTXYRYj3yH1x5EnPTtYQwAa4JI7AMDh4mGIADzuDHtQoEyD-8N6490L4UUwnDLOD0uj5XeR5sMPuz6-ZEBcUBLlbi9kFDLz3jrZhAXnf1jlN2kBTOTJV3wNkQwIA'
+dbx = dropbox.Dropbox(access_token)
+local_file_path = 'fornecedores.db'
+remote_file_path = '/fornecedores.db'
+
 locale.setlocale(locale.LC_TIME, 'pt_BR.utf-8')
+
 
 def config_valor_leite(event):
     def GREP_SETTINGS():
         banco_dbs = sqlite3.connect("fornecedores.db")
         banco = banco_dbs.cursor()
-        banco.execute(f'''UPDATE TABLE SETTING_DEFAULT SET PRECO NUMBER={PRECO_UND_LEITE_EN.get()}''')
+        banco.execute(f'''UPDATE SETTING_DEFAULT SET PRECO={PRECO_UND_LEITE_EN.get()}''')
         banco_dbs.commit()
         print('SALVO')
     janela_val = tk.Tk()
